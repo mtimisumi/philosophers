@@ -20,7 +20,7 @@ CC := cc
 
 CFLAGS := -Wall -Werror -Wextra -I. -g
 
-RM := rm -f
+RM := rm -rf
 
 all: obj $(NAME)
 
@@ -36,11 +36,9 @@ obj/%.o: src/%.c
 clean:
 	$(RM) $(OBJS)
 	$(RM) obj
-	make clean
 
 fclean: clean 
 	$(RM) $(NAME)
-	make fclean
 
 re: fclean all
 

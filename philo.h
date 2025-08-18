@@ -26,6 +26,15 @@ typedef struct	s_philo
 }				t_philo;
 
 
+typedef struct	s_data
+{
+	pthread_t		philo;
+	int				id;
+	pthread_mutex_t	left_fork; // points to 0x7
+	pthread_mutex_t	right_fork; // points to 0x7
+	struct s_data	*next;
+}				t_data;
+
 //utils
 int		to_pos_int(char *s);
 

@@ -17,22 +17,22 @@ pthread_mutex_t mutex;
 
 void	*message()
 {
-	pthread_mutex_lock(&mutex);
+	// pthread_mutex_lock(&mutex);
 	printf("Start of thread\n");
-	for (int i = 0; i < 10000000; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		// pthread_mutex_lock(&mutex);
 		mails++;
 		// pthread_mutex_unlock(&mutex);
 	}
-	pthread_mutex_unlock(&mutex);
+	// pthread_mutex_unlock(&mutex);
 	printf("End of thread\n");
 }
 
 int	main(void)
 {
 	pthread_t	t1, t2, t3, t4;
-	pthread_mutex_init(&mutex, NULL);
+	// pthread_mutex_init(&mutex, NULL);
 	if (pthread_create(&t1, NULL, &message, NULL) != 0)
 		printf("Error creating thread t1\n");
 	if (pthread_create(&t2, NULL, &message, NULL) != 0)
@@ -49,7 +49,7 @@ int	main(void)
 		printf("Join error t3\n");
 	if (pthread_join(t4, NULL) != 0)
 		printf("Join error t4");
-	pthread_mutex_destroy(&mutex);
+	// pthread_mutex_destroy(&mutex);
 	printf("number of mails: %d\n", mails);
 	return (0);
 }
