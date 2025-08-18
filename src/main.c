@@ -55,43 +55,6 @@ t_data	*init_data_list(t_data **data, pthread_t *philo,
 	return (*data);
 }
 
-void	*task(void *arg)
-{
-	t_data	*data;
-
-	data = (t_data *)arg;
-	pthread_mutex_lock(data->left_fork);
-	pthread_mutex_lock(data->right_fork);
-	printf("id %d: Taking the forks\n", data->id);
-	sleep(3);
-	pthread_mutex_unlock(data->left_fork);
-	pthread_mutex_unlock(data->right_fork);
-	return (NULL);
-}
-
-void	loop(t_data *data, int philo_count)
-{
-	(void)philo_count;
-	pthread_mutex_init(data->left_fork, NULL);
-	while (data)
-	{
-		if (data->next != NULL)
-			pthread_mutex_init(data->right_fork, NULL);
-		pthread_create(&data->philo, NULL, &task, data);
-		data = data->next;
-	}
-}
-
-void	print_data(t_data *data)
-{
-	while (data)
-	{
-		printf("philo: %d\n", data->id);
-		printf("left_fork : %p\n", data->left_fork);
-		printf("right_fork: %p\n", data->right_fork);
-		data = data->next;
-	}
-}
 int	philo(char **argv)
 {
 	(void)argv;
@@ -113,7 +76,7 @@ int	philo(char **argv)
 		return (1);
 	//free philo and mutex
 	// print_data(data);
-	loop(data, philo_count);
+	loop(data);
 	return (0);
 }
 

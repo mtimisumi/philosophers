@@ -41,4 +41,8 @@ int		to_pos_int(char *s);
 //validate
 bool	are_valid_args(char **argv);
 
+//temp
+void	loop(t_data *data);
+void	print_data(t_data *data);
+
 #endif
