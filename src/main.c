@@ -1,6 +1,6 @@
 #include "philo.h"
 
-t_data	*init_data_node(pthread_t philo, int id,
+t_data	*init_data_node(pthread_t philo,
 		pthread_mutex_t *left_fork, pthread_mutex_t *right_fork)
 {
 	t_data	*new;
@@ -9,7 +9,6 @@ t_data	*init_data_node(pthread_t philo, int id,
 	if (!new)
 		return (NULL);
 	new->philo = philo;
-	new->id = id;
 	new->left_fork = left_fork;
 	new->right_fork = right_fork;
 	new->next = NULL;
@@ -45,7 +44,7 @@ t_data	*init_data_list(t_data **data, pthread_t *philo,
 	while (i < philo_count)
 	{
 		right_fork = &mutex[i];
-		new = init_data_node(philo[i], i, left_fork, right_fork);
+		new = init_data_node(philo[i], left_fork, right_fork);
 		if (!new)
 			return (NULL);
 		add_data_node_back(data, new);
@@ -64,7 +63,6 @@ int	philo(char **argv)
 	int				philo_count;
 
 	philo_count = to_pos_int(argv[1]);
-	printf("philo_count: %d\n", philo_count);
 	philo = malloc(philo_count * sizeof(pthread_t));
 	if (!philo)
 		return (1);
@@ -75,8 +73,8 @@ int	philo(char **argv)
 	if (init_data_list(&data, philo, mutex, philo_count) == NULL)
 		return (1);
 	//free philo and mutex
-	// print_data(data);
 	loop(data);
+	print_data(data);
 	return (0);
 }
 

@@ -20,16 +20,13 @@
 # include <stdbool.h>
 # include <string.h>
 
-typedef struct	s_philo
-{
-	pthread_mutex_t	mutex;
-}				t_philo;
-
+// i use this struct to loop all the philos and threading them
+// DATA I PASS TO ROUTINE:
+// i need the forks, i need a list with argv's, 
 
 typedef struct	s_data
 {
 	pthread_t		philo;
-	int				id;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	struct s_data	*next;

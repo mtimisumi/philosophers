@@ -7,7 +7,6 @@ void	*task(void *arg)
 	data = (t_data *)arg;
 	pthread_mutex_lock(data->left_fork);
 	pthread_mutex_lock(data->right_fork);
-	printf("id %d: Taking the forks\n", data->id);
 	sleep(3);
 	pthread_mutex_unlock(data->left_fork);
 	pthread_mutex_unlock(data->right_fork);
@@ -47,7 +46,6 @@ void	print_data(t_data *data)
 {
 	while (data)
 	{
-		printf("philo: %d\n", data->id);
 		printf("left_fork : %p\n", data->left_fork);
 		printf("right_fork: %p\n", data->right_fork);
 		data = data->next;
