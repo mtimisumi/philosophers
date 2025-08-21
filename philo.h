@@ -6,7 +6,7 @@
 /*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:20:25 by mmisumi           #+#    #+#             */
-/*   Updated: 2025/08/21 14:52:30 by mmisumi          ###   ########.fr       */
+/*   Updated: 2025/08/21 15:47:45 by mmisumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,26 @@
 # include <stdbool.h>
 # include <string.h>
 
+# define mutex_t pthread_mutex_t
+
 typedef struct	s_philo
 {
-	int				philo_id;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	int				meal_count;
-	bool			dead;
-	struct s_philo	*next;
+	int		philo_id;
+	int		meal_count;
+	mutex_t	*left_fork;
+	mutex_t	*right_fork;
+	bool	dead;
 }				t_philo;
 
 typedef struct	s_data
 {
-	int	philo_count;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	amount_of_meals;
+	int		philo_count;
+	int		time_to_die;
+	int		time_to_eat;
+	int		time_to_sleep;
+	int		amount_of_meals;
+	mutex_t	*meals;
+	t_philo	*philo;
 }				t_data;
 
 
@@ -46,16 +49,14 @@ bool	are_valid_args(char **argv);
 //utils
 bool	init_data(t_data *data, char **argv);
 
-//allocate
-// bool	allocate_data(t_data *data);
-// bool	allocate_philo(t_philo *philo);
-bool	allocate_philos(pthread_t *philos, int philo_count);
-bool	allocate_forks(pthread_mutex_t *forks, int philo_count);
-
 //create philos
-bool	create_philos(t_philo **philo, int philo_count,
-		int meal_count, pthread_mutex_t *forks);
+bool	create_philos(t_philo *philo, int philo_count,
+		int meal_count, mutex_t *forks);
 
+//diner
+bool	start_diner(t_data *data, pthread_t *philos, mutex_t *forks);
+bool	end_diner(pthread_t *philos);
+bool	cleanup_diner(mutex_t *forks, int count);
 
 
 #endif

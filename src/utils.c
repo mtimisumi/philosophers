@@ -6,7 +6,7 @@
 /*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:53:01 by mmisumi           #+#    #+#             */
-/*   Updated: 2025/08/21 14:47:42 by mmisumi          ###   ########.fr       */
+/*   Updated: 2025/08/21 15:01:25 by mmisumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ bool	init_data(t_data *data, char **argv)
 	data->time_to_eat = to_pos_int(argv[3]);
 	data->time_to_sleep = to_pos_int(argv[4]);
 	data->amount_of_meals = to_pos_int(argv[5]);
+	data->philo = NULL;
 	return (true);
 }
