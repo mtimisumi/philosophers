@@ -6,15 +6,29 @@
 /*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 15:28:36 by mmisumi           #+#    #+#             */
-/*   Updated: 2025/08/21 16:02:28 by mmisumi          ###   ########.fr       */
+/*   Updated: 2025/08/21 17:42:35 by mmisumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*rountine(void *arg)
+void	*routine(void *arg)
 {
-	(void)arg;
+	t_data	*data;
+	int	i;
+
+	data = (t_data *)arg;
+	i = 0;
+	while (i < data->philo_count)
+	{
+		pthread_mutex_lock(data->philo->left_fork);
+		pthread_mutex_lock(data->philo->right_fork);
+		printf("locking with philo number %d\n", i);
+		sleep(1);
+		pthread_mutex_unlock(data->philo->left_fork);
+		pthread_mutex_unlock(data->philo->right_fork);
+		i++;
+	}
 	return (NULL);
 }
 
@@ -32,7 +46,7 @@ bool	start_diner(t_data *data, pthread_t *philos, mutex_t *forks)
 	i = 0;
 	while (philos[i])
 	{
-		if (pthread_create(&philos[i], NULL, &rountine, data) != 0)
+		if (pthread_create(&philos[i], NULL, &routine, data) != 0)
 			return (false);
 		i++;
 	}
