@@ -1,92 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/21 14:16:17 by mmisumi           #+#    #+#             */
+/*   Updated: 2025/08/21 14:56:24 by mmisumi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-t_data	*init_data_node(pthread_t philo,
-		pthread_mutex_t *left_fork, pthread_mutex_t *right_fork)
+bool	start_diner(t_data *data, t_philo *philo)
 {
-	t_data	*new;
-
-	new = malloc(sizeof(t_data));
-	if (!new)
-		return (NULL);
-	new->philo = philo;
-	new->left_fork = left_fork;
-	new->right_fork = right_fork;
-	new->next = NULL;
-	return (new);
+	while ()
 }
 
-void	add_data_node_back(t_data **data, t_data *new)
+bool	setup_diner(t_data *data, char **argv)
 {
-	t_data	*temp;
+	t_philo			*philo;
+	pthread_t		*philos;
+	pthread_mutex_t	*forks;
 
-	if (*data == NULL)
-	{
-		*data = new;
-		return ;
-	}
-	temp = *data;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
+	if (allocate_philos(philos, data->philo_count) == false)
+		return (false);
+	if (allocate_forks(forks, data->philo_count) == false)
+		return (false);
+	philo = NULL;
+	if (create_philos(&philo, data->philo_count, data->amount_of_meals, forks) == false)
+		return (false);
+	if (start_diner(data, philo) == false)
+		return (false);
+	return (true);
 }
-
-t_data	*init_data_list(t_data **data, pthread_t *philo,
-		pthread_mutex_t *mutex, int philo_count)
-{
-	t_data			*new;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	int				i;
-
-	left_fork = &mutex[philo_count - 1];
-	new = NULL;
-	i = 0;
-	while (i < philo_count)
-	{
-		right_fork = &mutex[i];
-		new = init_data_node(philo[i], left_fork, right_fork);
-		if (!new)
-			return (NULL);
-		add_data_node_back(data, new);
-		left_fork = &mutex[i];
-		i++;
-	}
-	return (*data);
-}
-
-int	philo(char **argv)
-{
-	(void)argv;
-	pthread_t		*philo;
-	pthread_mutex_t	*mutex;
-	t_data			*data;
-	int				philo_count;
-
-	philo_count = to_pos_int(argv[1]);
-	philo = malloc(philo_count * sizeof(pthread_t));
-	if (!philo)
-		return (1);
-	mutex = malloc (philo_count * sizeof(pthread_mutex_t));
-	if (!mutex)
-		return (1);
-	data = NULL;
-	if (init_data_list(&data, philo, mutex, philo_count) == NULL)
-		return (1);
-	//free philo and mutex
-	loop(data);
-	print_data(data);
-	return (0);
-}
-
 
 int	main(int argc, char *argv[])
 {
+	t_data	data;
+
+	memset(&data, 0, sizeof(t_data));
 	if (argc == 5 || argc == 6)
 	{
-		if (are_valid_args(argv) == false)
-			return (1);
-		return (philo(argv));
+		if (init_data(&data, argv) == true)
+			return (setup_diner(&data, argv));
+		return (1);
 	}
-	else
-		return (printf("Invalid amount of arguments\n"), 1);
+	return (printf("Invalid amount of args\n"), 1);
 }

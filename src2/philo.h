@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 12:20:25 by mmisumi           #+#    #+#             */
-/*   Updated: 2025/08/21 14:52:30 by mmisumi          ###   ########.fr       */
+/*   Created: 2025/08/10 12:47:53 by mmisumi           #+#    #+#             */
+/*   Updated: 2025/08/10 17:37:19 by mmisumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,42 +20,26 @@
 # include <stdbool.h>
 # include <string.h>
 
-typedef struct	s_philo
-{
-	int				philo_id;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	int				meal_count;
-	bool			dead;
-	struct s_philo	*next;
-}				t_philo;
+// i use this struct to loop all the philos and threading them
+// DATA I PASS TO ROUTINE:
+// i need the forks, i need a list with argv's, 
 
 typedef struct	s_data
 {
-	int	philo_count;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	amount_of_meals;
+	pthread_t		philo;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	struct s_data	*next;
 }				t_data;
 
+//utils
+int		to_pos_int(char *s);
 
 //validate
 bool	are_valid_args(char **argv);
 
-//utils
-bool	init_data(t_data *data, char **argv);
-
-//allocate
-// bool	allocate_data(t_data *data);
-// bool	allocate_philo(t_philo *philo);
-bool	allocate_philos(pthread_t *philos, int philo_count);
-bool	allocate_forks(pthread_mutex_t *forks, int philo_count);
-
-//create philos
-bool	create_philos(t_philo **philo, int philo_count,
-		int meal_count, pthread_mutex_t *forks);
-
-
+//temp
+void	loop(t_data *data);
+void	print_data(t_data *data);
 
 #endif
