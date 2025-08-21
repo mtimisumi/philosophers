@@ -6,7 +6,7 @@
 /*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:53:01 by mmisumi           #+#    #+#             */
-/*   Updated: 2025/08/21 15:01:25 by mmisumi          ###   ########.fr       */
+/*   Updated: 2025/08/21 16:40:40 by mmisumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,29 @@ bool	init_data(t_data *data, char **argv)
 	data->time_to_eat = to_pos_int(argv[3]);
 	data->time_to_sleep = to_pos_int(argv[4]);
 	data->amount_of_meals = to_pos_int(argv[5]);
-	data->philo = NULL;
 	return (true);
+}
+
+void	cleanup(t_data *data)
+{
+	if (!data)
+		return ;
+	if (data->diner)
+	{
+		if (pthread_mutex_destroy(data->diner) != 0)
+			free(data->diner);
+	}
+	if (data->philos)
+		free(data->philos);
+	if (data->forks)
+		free(data->forks);
+	if (data->philo)
+	{
+		if (data->philo->left_fork)
+			free(data->philo->left_fork);
+		if (data->philo->right_fork)
+			free(data->philo->right_fork);
+		free(data->philo);
+		data->philo++;
+	}
 }
