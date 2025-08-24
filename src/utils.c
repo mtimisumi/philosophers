@@ -1,21 +1,5 @@
 #include "philo.h"
 
-bool	allocate_for_philos(t_data *data)
-{
-	data->philos = malloc(data->philo_count * sizeof(pthread_t));
-	if (!data->philos)
-		return (false);
-	return (true);
-}
-
-bool	allocate_for_forks(t_data *data)
-{
-	data->forks = malloc(data->philo_count * sizeof(mutex_t));
-	if (!data->forks)
-		return (false);
-	return (true);
-}
-
 int	to_pos_int(char *s)
 {
 	int	i;
@@ -47,4 +31,27 @@ bool	init_data(t_data *data, char **argv)
 	data->amount_of_meals = to_pos_int(argv[5]);
 	return (true);
 }
+
+void	destroy_mutexes(t_data *data, int i)
+{
+	while (i >= 0)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		i--;
+	}
+	free(data->forks);
+	data->forks = NULL;
+}
+
+void	detach_threads(t_data *data, int i)
+{
+	while (i >= 0)
+	{
+		pthread_detach(data->philos[i]);
+		i--;
+	}
+	free(data->philos);
+	data->philos = NULL;
+}
+
 

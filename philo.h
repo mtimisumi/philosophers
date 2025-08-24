@@ -36,9 +36,9 @@ typedef struct	s_data
 }				t_data;
 
 //utils
-bool	allocate_for_philos(t_data *data);
-bool	allocate_for_forks(t_data *data);
 bool	init_data(t_data *data, char **argv);
+void	destroy_mutexes(t_data *data, int i);
+void	detach_threads(t_data *data, int i);
 
 //validate
 bool	are_valid_args(char **argv);
@@ -58,5 +58,8 @@ bool	end_diner(t_data *data);
 long	get_time_in_ms(void);
 void	ft_usleep(long mili_secs);
 long	get_cur_time(long start_time);
+
+//routine
+void	*routine(void *arg);
 
 #endif

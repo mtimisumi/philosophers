@@ -1,35 +1,41 @@
 #include "philo.h"
 
-bool	setup_diner(t_data *data)
+void	cleanup(t_data *data)
 {
-	if (allocate_for_philos(data) == false)
-		return (false);
-	if (allocate_for_forks(data) == false)
-		return (false);
-	if (create_philos(data) == false)
-		return (false);
-	if (start_diner(data) == false)
-		return (false);
-	if (end_diner(data) == false)
-		return (false);
-	return (true);
+	if (data->philos)
+		free(data->philos);
+	if (data->forks)
+		free(data->forks);
+	if (data->philo)
+		free(data->philo);
+}
+
+int	philo(char **argv)
+{
+	t_data	data;
+
+	memset(&data, 0, sizeof(t_data));
+	if (init_data(&data, argv) == false)
+		return (1);
+	data.philos = malloc(data.philo_count * sizeof(pthread_t));
+	if (!data.philos)
+		return (1);
+	data.forks = malloc(data.philo_count * sizeof(mutex_t));
+	if (!data.forks)
+		return (1);
+	if (create_philos(&data) == false)
+		return (1);
+	if (start_diner(&data) == false)
+		return (1);
+	if (end_diner(&data) == false)
+		return (1);
+	cleanup(&data);
+	return (0);
 }
 
 int	main(int argc, char *argv[])
 {
-	t_data	data;
-	int		exitcode;
-
-	memset(&data, 0, sizeof(t_data));
-	if (argc == 5 || argc == 6)
-	{
-		if (init_data(&data, argv) == true)
-		{
-			exitcode = setup_diner(&data);
-			// cleanup(&data);
-			return (exitcode);
-		}
-		return (1);
-	}
-	return (printf("Invalid amount of args\n"), 1);
+	if (argc != 5 && argc != 6)
+		return (printf("Invalid amount of args\n"), 1);
+	return (philo(argv));
 }
