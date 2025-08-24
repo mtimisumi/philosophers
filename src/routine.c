@@ -33,17 +33,6 @@ void	go_sleep(t_philo *philo)
 	ft_usleep(philo->data->time_to_sleep);
 }
 
-// void	*routine(void *arg)
-// {
-// 	t_philo	*philo;
-
-// 	philo = (t_philo *)arg;
-// 	eat_meal(philo);
-// 	go_sleep(philo);
-// 	print_msg("is thinking", philo->data->start_time, philo->id);
-// 	return (NULL);
-// }
-
 bool	philo_is_full(t_philo *philo)
 {
 	if (philo->data->amount_of_meals == -1)
