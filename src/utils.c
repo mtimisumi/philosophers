@@ -29,6 +29,9 @@ bool	init_data(t_data *data, char **argv)
 	data->time_to_eat = to_pos_int(argv[3]);
 	data->time_to_sleep = to_pos_int(argv[4]);
 	data->amount_of_meals = to_pos_int(argv[5]);
+	data->philo_died = malloc(1 * sizeof(mutex_t));
+	if (!data->philo_died)
+		return (false);
 	return (true);
 }
 

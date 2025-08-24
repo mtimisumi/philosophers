@@ -18,8 +18,8 @@ typedef struct	s_philo
 	int		left_fork;
 	int		right_fork;
 	int		meal_count;
+	long	last_meal;
 	bool	full;
-	bool	dead;
 	t_data	*data;
 }				t_philo;
 
@@ -31,6 +31,7 @@ typedef struct	s_data
 	int			time_to_eat;
 	int			time_to_sleep;
 	int			amount_of_meals;
+	mutex_t		*philo_died;
 	pthread_t	*philos;
 	mutex_t		*forks;
 	t_philo		*philo;
