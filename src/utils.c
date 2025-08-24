@@ -39,6 +39,7 @@ bool	init_data(t_data *data, char **argv)
 {
 	if (are_valid_args(argv) == false)
 		return (false);
+	data->start_time = get_time_in_ms();
 	data->philo_count = to_pos_int(argv[1]);
 	data->time_to_die = to_pos_int(argv[2]);
 	data->time_to_eat = to_pos_int(argv[3]);

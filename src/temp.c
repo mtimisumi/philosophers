@@ -39,6 +39,7 @@ void	print_philo(t_philo *philo)
 
 void	print_data(t_data *data)
 {
+	printf("start time: %ld\n", data->start_time);
 	printf("philo count: %d\n", data->philo_count);
 	printf("time to die: %d\n", data->time_to_die);
 	printf("time to eat: %d\n", data->time_to_eat);

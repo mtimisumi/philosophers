@@ -12,6 +12,7 @@ bool	setup_diner(t_data *data)
 		return (false);
 	if (end_diner(data) == false)
 		return (false);
+	// print_data(data);
 	return (true);
 }
 

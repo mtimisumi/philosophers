@@ -7,6 +7,7 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include <string.h>
+# include <sys/time.h>
 
 # define mutex_t pthread_mutex_t
 typedef struct s_data	t_data;
@@ -23,6 +24,7 @@ typedef struct	s_philo
 
 typedef struct	s_data
 {
+	long		start_time;
 	int			philo_count;
 	int			time_to_die;
 	int			time_to_eat;
@@ -51,5 +53,10 @@ void	print_data(t_data *data);
 //diner
 bool	start_diner(t_data *data);
 bool	end_diner(t_data *data);
+
+//time
+long	get_time_in_ms(void);
+void	ft_usleep(long mili_secs);
+long	get_cur_time(long start_time);
 
 #endif
