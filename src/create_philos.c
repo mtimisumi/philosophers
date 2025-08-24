@@ -6,6 +6,7 @@ void	init_philo(t_data *data, t_philo *philo, int id, int left_fork, int right_f
 	philo->left_fork = left_fork;
 	philo->right_fork = right_fork;
 	philo->meal_count = 0;
+	philo->full = false;
 	philo->dead = false;
 	philo->data = data;
 }

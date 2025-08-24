@@ -18,6 +18,7 @@ typedef struct	s_philo
 	int		left_fork;
 	int		right_fork;
 	int		meal_count;
+	bool	full;
 	bool	dead;
 	t_data	*data;
 }				t_philo;
