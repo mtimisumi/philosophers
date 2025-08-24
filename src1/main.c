@@ -9,6 +9,7 @@ t_data	*init_data_node(pthread_t philo,
 	if (!new)
 		return (NULL);
 	new->philo = philo;
+	
 	new->left_fork = left_fork;
 	new->right_fork = right_fork;
 	new->next = NULL;

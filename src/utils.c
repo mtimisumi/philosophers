@@ -1,16 +1,20 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 12:53:01 by mmisumi           #+#    #+#             */
-/*   Updated: 2025/08/21 16:40:40 by mmisumi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
+
+bool	allocate_for_philos(t_data *data)
+{
+	data->philos = malloc(data->philo_count * sizeof(pthread_t));
+	if (!data->philos)
+		return (false);
+	return (true);
+}
+
+bool	allocate_for_forks(t_data *data)
+{
+	data->forks = malloc(data->philo_count * sizeof(mutex_t));
+	if (!data->forks)
+		return (false);
+	return (true);
+}
 
 int	to_pos_int(char *s)
 {
@@ -43,26 +47,3 @@ bool	init_data(t_data *data, char **argv)
 	return (true);
 }
 
-void	cleanup(t_data *data)
-{
-	if (!data)
-		return ;
-	if (data->diner)
-	{
-		if (pthread_mutex_destroy(data->diner) != 0)
-			free(data->diner);
-	}
-	if (data->philos)
-		free(data->philos);
-	if (data->forks)
-		free(data->forks);
-	if (data->philo)
-	{
-		if (data->philo->left_fork)
-			free(data->philo->left_fork);
-		if (data->philo->right_fork)
-			free(data->philo->right_fork);
-		free(data->philo);
-		data->philo++;
-	}
-}

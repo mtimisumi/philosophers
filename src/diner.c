@@ -1,76 +1,57 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   diner.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 15:28:36 by mmisumi           #+#    #+#             */
-/*   Updated: 2025/08/21 17:42:35 by mmisumi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 void	*routine(void *arg)
 {
-	t_data	*data;
-	int	i;
+	t_philo	*philo;
 
-	data = (t_data *)arg;
-	i = 0;
-	while (i < data->philo_count)
-	{
-		pthread_mutex_lock(data->philo->left_fork);
-		pthread_mutex_lock(data->philo->right_fork);
-		printf("locking with philo number %d\n", i);
-		sleep(1);
-		pthread_mutex_unlock(data->philo->left_fork);
-		pthread_mutex_unlock(data->philo->right_fork);
-		i++;
-	}
+	philo = (t_philo *)arg;
+	pthread_mutex_lock(&philo->data->forks[philo->left_fork]);
+	pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
+	print_philo(philo);
+	sleep(2);
+	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
+	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 	return (NULL);
 }
 
-bool	start_diner(t_data *data, pthread_t *philos, mutex_t *forks)
+bool	start_diner(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while (i < data->philo_count)
 	{
-		if (pthread_mutex_init(&forks[i], NULL) != 0)
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
 			return (false);
 		i++;
 	}
 	i = 0;
-	while (philos[i])
+	while (i < data->philo_count)
 	{
-		if (pthread_create(&philos[i], NULL, &routine, data) != 0)
+		if (pthread_create(&data->philos[i], NULL, &routine, &data->philo[i]) != 0)
 			return (false);
 		i++;
 	}
 	return (true);
 }
 
-bool	end_diner(pthread_t *philos, mutex_t *forks, int count)
+bool	end_diner(t_data *data)
 {
 	int	i;
 
 	i = 0;
-	while (philos[i])
+	while (i < data->philo_count)
 	{
-		if (pthread_join(philos[i], NULL) != 0)
+		if (pthread_join(data->philos[i], NULL) != 0)
 			return (false);
 		i++;
 	}
 	i = 0;
-	while (i < count)
+	while (i < data->philo_count)
 	{
-		if (pthread_mutex_destroy(&forks[i]) != 0)
+		if (pthread_mutex_destroy(&data->forks[i]) != 0)
 			return (false);
 		i++;
 	}
 	return (true);
 }
-

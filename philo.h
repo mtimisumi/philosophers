@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mmisumi <mmisumi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 12:20:25 by mmisumi           #+#    #+#             */
-/*   Updated: 2025/08/21 16:17:04 by mmisumi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -21,14 +9,16 @@
 # include <string.h>
 
 # define mutex_t pthread_mutex_t
+typedef struct s_data	t_data;
 
 typedef struct	s_philo
 {
-	int		philo_id;
+	int		id;
+	int		left_fork;
+	int		right_fork;
 	int		meal_count;
-	mutex_t	*left_fork;
-	mutex_t	*right_fork;
 	bool	dead;
+	t_data	*data;
 }				t_philo;
 
 typedef struct	s_data
@@ -38,27 +28,28 @@ typedef struct	s_data
 	int			time_to_eat;
 	int			time_to_sleep;
 	int			amount_of_meals;
-	mutex_t		*diner;
 	pthread_t	*philos;
 	mutex_t		*forks;
 	t_philo		*philo;
 }				t_data;
 
+//utils
+bool	allocate_for_philos(t_data *data);
+bool	allocate_for_forks(t_data *data);
+bool	init_data(t_data *data, char **argv);
 
 //validate
 bool	are_valid_args(char **argv);
 
-//utils
-bool	init_data(t_data *data, char **argv);
-void	cleanup(t_data *data);
-
 //create philos
-bool	create_philos(t_philo *philo, int philo_count,
-		int meal_count, mutex_t *forks);
+bool	create_philos(t_data *data);
+
+//temp
+void	print_philo(t_philo *philo);
+void	print_data(t_data *data);
 
 //diner
-bool	start_diner(t_data *data, pthread_t *philos, mutex_t *forks);
-bool	end_diner(pthread_t *philos, mutex_t *forks, int count);
-
+bool	start_diner(t_data *data);
+bool	end_diner(t_data *data);
 
 #endif
