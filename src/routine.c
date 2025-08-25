@@ -1,11 +1,6 @@
 #include "philo.h"
 
-void	print_msg(char *msg, long start_time, int id)
-{
-	printf("%-6ld %-3d %s\n", get_cur_time(start_time), id, msg);
-}
-
-void	eat_meal(t_philo *philo)
+bool	eat_meal(t_philo *philo)
 {
 	if (philo->left_fork > philo->right_fork)
 	{
@@ -21,16 +16,23 @@ void	eat_meal(t_philo *philo)
 		pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
 		print_msg("has taken a fork", philo->data->start_time, philo->id);
 	}
-		print_msg("is eating", philo->data->start_time, philo->id);
-	ft_usleep(philo->data->time_to_eat);
+	pthread_mutex_lock(philo->meal);
+	philo->last_meal = get_cur_time(philo->data->start_time);
+	pthread_mutex_unlock(philo->meal);
+	print_msg("is eating", philo->data->start_time, philo->id);
+	if (ft_usleep(philo->data, philo->data->time_to_eat) == false)
+		return (false);
 	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
+	return (true);
 }
 
-void	go_sleep(t_philo *philo)
+bool	go_sleep(t_philo *philo)
 {
 	print_msg("is sleeping", philo->data->start_time, philo->id);
-	ft_usleep(philo->data->time_to_sleep);
+	if (ft_usleep(philo->data, philo->data->time_to_sleep) == false)
+		return (false);
+	return (true);
 }
 
 bool	philo_is_full(t_philo *philo)
@@ -39,6 +41,9 @@ bool	philo_is_full(t_philo *philo)
 		return (false);
 	if (philo->meal_count < philo->data->amount_of_meals)
 		return (false);
+	pthread_mutex_lock(&philo->data->status[1]);
+	philo->data->full++;
+	pthread_mutex_unlock(&philo->data->status[1]);
 	return (true);
 }
 
@@ -47,13 +52,15 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (philo->dead == false)
+	while (check_dead_status(philo->data) == false)
 	{
-		eat_meal(philo);
+		if (eat_meal(philo) == false)
+			break ;
 		philo->meal_count++;
 		if (philo_is_full(philo) == true)
 			break ;
-		go_sleep(philo);
+		if (go_sleep(philo) == false)
+			break ;
 		print_msg("is thinking", philo->data->start_time, philo->id);
 	}
 	return (NULL);

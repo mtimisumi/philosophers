@@ -13,13 +13,18 @@ long	get_cur_time(long start_time)
 	return (get_time_in_ms() - start_time);
 }
 
-void	ft_usleep(long mili_secs)
+bool	ft_usleep(t_data *data, long mili_secs)
 {
 	long	start;
 
 	start = get_time_in_ms();
 	while ((get_time_in_ms() - start) < mili_secs)
+	{
+		if (check_dead_status(data) == true)
+			return (false);
 		usleep(500);
+	}
+	return (true);
 }
 
 

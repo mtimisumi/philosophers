@@ -19,42 +19,20 @@ int	to_pos_int(char *s)
 	return (nbr);
 }
 
-bool	init_data(t_data *data, char **argv)
+bool	check_dead_status(t_data *data)
 {
-	if (are_valid_args(argv) == false)
-		return (false);
-	data->start_time = get_time_in_ms();
-	data->philo_count = to_pos_int(argv[1]);
-	data->time_to_die = to_pos_int(argv[2]);
-	data->time_to_eat = to_pos_int(argv[3]);
-	data->time_to_sleep = to_pos_int(argv[4]);
-	data->amount_of_meals = to_pos_int(argv[5]);
-	data->philo_died = malloc(1 * sizeof(mutex_t));
-	if (!data->philo_died)
-		return (false);
-	return (true);
-}
-
-void	destroy_mutexes(t_data *data, int i)
-{
-	while (i >= 0)
+	pthread_mutex_lock(&data->status[0]);
+	if (data->dead == true)
 	{
-		pthread_mutex_destroy(&data->forks[i]);
-		i--;
+		pthread_mutex_unlock(&data->status[0]);
+		return (true);
 	}
-	free(data->forks);
-	data->forks = NULL;
+	pthread_mutex_unlock(&data->status[0]);
+	return (false);
 }
 
-void	detach_threads(t_data *data, int i)
+void	print_msg(char *msg, long start_time, int id)
 {
-	while (i >= 0)
-	{
-		pthread_detach(data->philos[i]);
-		i--;
-	}
-	free(data->philos);
-	data->philos = NULL;
+	printf("%-6ld %-3d %s\n", get_cur_time(start_time), id, msg);
 }
-
 

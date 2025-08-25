@@ -30,10 +30,10 @@ void	print_philo(t_philo *philo)
 	printf("left fork: %d\n", philo->left_fork);
 	printf("right fork: %d\n", philo->right_fork);
 	printf("meal count: %d\n", philo->meal_count);
-	if (philo->dead == false)
-		printf("philo: alive\n");
+	if (philo->full == false)
+		printf("philo: hungry\n");
 	else
-		printf("philo: dead\n");
+		printf("philo: full\n");
 	printf("------------------\n");
 }
 

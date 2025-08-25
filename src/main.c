@@ -1,41 +1,51 @@
 #include "philo.h"
 
-void	cleanup(t_data *data)
+void	monitor_philos(t_data *data)
 {
-	if (data->philos)
-		free(data->philos);
-	if (data->forks)
-		free(data->forks);
-	if (data->philo)
-		free(data->philo);
+	int	i;
+
+	i = 0;
+	while (1)
+	{
+		if (i == data->philo_count)
+			i = 0;
+		if ((get_cur_time(data->start_time) - data->philo[i].last_meal) > data->time_to_die)
+		{
+			pthread_mutex_lock(&data->status[0]);
+			data->dead = true;
+			print_msg("has died", data->start_time, i);
+			pthread_mutex_unlock(&data->status[0]);
+			break ;
+		}
+		pthread_mutex_lock(&data->status[1]);
+		if (data->full == data->philo_count)
+		{
+			printf("\nall philosophers are full\n");
+			break ;
+		}
+		pthread_mutex_unlock(&data->status[1]);
+		i++;
+	}
 }
 
-int	philo(char **argv)
+bool	philo(t_data *data)
 {
-	t_data	data;
-
-	memset(&data, 0, sizeof(t_data));
-	if (init_data(&data, argv) == false)
-		return (1);
-	data.philos = malloc(data.philo_count * sizeof(pthread_t));
-	if (!data.philos)
-		return (1);
-	data.forks = malloc(data.philo_count * sizeof(mutex_t));
-	if (!data.forks)
-		return (1);
-	if (create_philos(&data) == false)
-		return (1);
-	if (start_diner(&data) == false)
-		return (1);
-	if (end_diner(&data) == false)
-		return (1);
-	cleanup(&data);
-	return (0);
+	if (start_diner(data) == false)
+		return (false);
+	monitor_philos(data);
+	if (end_diner(data) == false)
+		return (false);
+	return (true);
 }
 
 int	main(int argc, char *argv[])
 {
+	t_data	data;
+
 	if (argc != 5 && argc != 6)
 		return (printf("Invalid amount of args\n"), 1);
-	return (philo(argv));
+	memset(&data, 0, sizeof(t_data));
+	if (init_data(&data, argv) == false || philo(&data) == false)
+		return (cleanup(&data), 1);
+	return (cleanup(&data), 0);
 }
