@@ -13,7 +13,7 @@ void	monitor_philos(t_data *data)
 		{
 			pthread_mutex_lock(&data->status[0]);
 			data->dead = true;
-			print_msg("has died", data->start_time, i);
+			printf("%-6ld %-3d has died\n", get_cur_time(data->start_time), i);
 			pthread_mutex_unlock(&data->status[0]);
 			break ;
 		}

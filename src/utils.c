@@ -31,8 +31,9 @@ bool	check_dead_status(t_data *data)
 	return (false);
 }
 
-void	print_msg(char *msg, long start_time, int id)
+void	print_msg(t_data *data, char *msg, long start_time, int id)
 {
-	printf("%-6ld %-3d %s\n", get_cur_time(start_time), id, msg);
+	if (check_dead_status(data) == false)
+		printf("%-6ld %-3d %s\n", get_cur_time(start_time), id, msg);
 }
 

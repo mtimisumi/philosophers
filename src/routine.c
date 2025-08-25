@@ -2,34 +2,35 @@
 
 bool	eat_meal(t_philo *philo)
 {
+	int	exitcode;
+
 	if (philo->left_fork > philo->right_fork)
 	{
 		pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
-		print_msg("has taken a fork", philo->data->start_time, philo->id);
+		print_msg(philo->data, "has taken a fork", philo->data->start_time, philo->id);
 		pthread_mutex_lock(&philo->data->forks[philo->left_fork]);
-		print_msg("has taken a fork", philo->data->start_time, philo->id);
+		print_msg(philo->data, "has taken a fork", philo->data->start_time, philo->id);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->data->forks[philo->left_fork]);
-		print_msg("has taken a fork", philo->data->start_time, philo->id);
+		print_msg(philo->data, "has taken a fork", philo->data->start_time, philo->id);
 		pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
-		print_msg("has taken a fork", philo->data->start_time, philo->id);
+		print_msg(philo->data, "has taken a fork", philo->data->start_time, philo->id);
 	}
 	pthread_mutex_lock(philo->meal);
 	philo->last_meal = get_cur_time(philo->data->start_time);
 	pthread_mutex_unlock(philo->meal);
-	print_msg("is eating", philo->data->start_time, philo->id);
-	if (ft_usleep(philo->data, philo->data->time_to_eat) == false)
-		return (false);
+	print_msg(philo->data, "is eating", philo->data->start_time, philo->id);
+	exitcode = ft_usleep(philo->data, philo->data->time_to_eat);
 	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
-	return (true);
+	return (exitcode);
 }
 
 bool	go_sleep(t_philo *philo)
 {
-	print_msg("is sleeping", philo->data->start_time, philo->id);
+	print_msg(philo->data, "is sleeping", philo->data->start_time, philo->id);
 	if (ft_usleep(philo->data, philo->data->time_to_sleep) == false)
 		return (false);
 	return (true);
@@ -61,7 +62,7 @@ void	*routine(void *arg)
 			break ;
 		if (go_sleep(philo) == false)
 			break ;
-		print_msg("is thinking", philo->data->start_time, philo->id);
+		print_msg(philo->data, "is thinking", philo->data->start_time, philo->id);
 	}
 	return (NULL);
 }

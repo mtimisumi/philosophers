@@ -43,7 +43,7 @@ typedef struct	s_data
 //utils
 bool	check_dead_status(t_data *data);
 int		to_pos_int(char *s);
-void	print_msg(char *msg, long start_time, int id);
+void	print_msg(t_data *data, char *msg, long start_time, int id);
 
 
 //cleanup
