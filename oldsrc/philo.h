@@ -12,9 +12,6 @@
 # define mutex_t pthread_mutex_t
 typedef struct s_data	t_data;
 
-# define DEAD 0
-# define FULL 1
-
 typedef struct	s_philo
 {
 	int		id;
@@ -22,7 +19,7 @@ typedef struct	s_philo
 	int		right_fork;
 	int		meal_count;
 	long	last_meal;
-	mutex_t	meal;
+	mutex_t	*meal;
 	bool	full;
 	t_data	*data;
 }				t_philo;
@@ -37,43 +34,46 @@ typedef struct	s_data
 	int			time_to_eat;
 	int			time_to_sleep;
 	int			amount_of_meals;
-	mutex_t		status[2];
+	mutex_t		*status;
 	pthread_t	*philos;
 	mutex_t		*forks;
 	t_philo		*philo;
 }				t_data;
 
-// initialize
-bool	init_data(t_data *data, char **argv);
-
-// validate
-bool	are_valid_args(char **argv);
-
-// utils
-int		to_pos_int(char *s);
+//utils
 bool	check_dead_status(t_data *data);
+int		to_pos_int(char *s);
 void	print_msg(t_data *data, char *msg, long start_time, int id);
 
-// time
-long	get_time_in_ms(void);
-long	get_cur_time(long start_time);
-bool	ft_usleep(t_data *data, long mili_secs);
-bool	is_dead(t_data *data, int i);
-// temp
+
+//cleanup
+void	cleanup(t_data *data);
+// void	detach_threads(t_data *data, int i);
+// void	destroy_mutexes(t_data *data, int i);
+void	detach_threads(pthread_t *thread, int i);
+void	destroy_mutexes(mutex_t *mutex, int i);
+
+
+//initialize
+bool	init_data(t_data *data, char **argv);
+
+//validate
+bool	are_valid_args(char **argv);
+
+//temp
+void	print_philo(t_philo *philo);
 void	print_data(t_data *data);
 
-// cleanup
-void	cleanup(t_data *data);
-void	destroy_fork_mutex(t_data *data, int i);
-void	detach_threads(t_data *data, int i);
-void	destroy_meal_mutex(t_data *data, int i);
-
-
-// diner
+//diner
 bool	start_diner(t_data *data);
 bool	end_diner(t_data *data);
 
-// routine
+//time
+long	get_time_in_ms(void);
+bool	ft_usleep(t_data *data, long mili_secs);
+long	get_cur_time(long start_time);
+
+//routine
 void	*routine(void *arg);
 
 #endif

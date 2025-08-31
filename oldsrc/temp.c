@@ -39,9 +39,6 @@ void	print_philo(t_philo *philo)
 
 void	print_data(t_data *data)
 {
-	int	i;
-
-	i = 0;
 	printf("start time: %ld\n", data->start_time);
 	printf("philo count: %d\n", data->philo_count);
 	printf("time to die: %d\n", data->time_to_die);
@@ -53,10 +50,4 @@ void	print_data(t_data *data)
 	printf("----------------------\n");
 	print_mutex_address(data->forks, data->philo_count);
 	printf("----------------------\n");
-
-	while (i < data->philo_count)
-	{
-		print_philo(&data->philo[i]);
-		i++;
-	}
 }

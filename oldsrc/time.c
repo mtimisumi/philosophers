@@ -26,3 +26,5 @@ bool	ft_usleep(t_data *data, long mili_secs)
 	}
 	return (true);
 }
+
+

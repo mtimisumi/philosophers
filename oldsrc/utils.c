@@ -19,7 +19,6 @@ int	to_pos_int(char *s)
 	return (nbr);
 }
 
-
 bool	check_dead_status(t_data *data)
 {
 	pthread_mutex_lock(&data->status[0]);
@@ -30,19 +29,6 @@ bool	check_dead_status(t_data *data)
 	}
 	pthread_mutex_unlock(&data->status[0]);
 	return (false);
-}
-
-bool	is_dead(t_data *data, int i)
-{
-	pthread_mutex_lock(&data->philo[i].meal);
-	if ((get_cur_time(data->start_time) - data->philo[i].last_meal) > data->time_to_die)
-	{
-		pthread_mutex_unlock(&data->philo[i].meal);
-		return (true);
-	}
-	pthread_mutex_unlock(&data->philo[i].meal);
-	return (false);
-	
 }
 
 void	print_msg(t_data *data, char *msg, long start_time, int id)

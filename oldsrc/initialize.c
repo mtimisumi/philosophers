@@ -26,6 +26,7 @@ bool	create_philos(t_data *data)
 	meal = malloc(data->philo_count * sizeof(mutex_t));
 	if (!meal)
 		return (false);
+
 	left_fork = data->philo_count - 1;
 	i = 0;
 	while (i < data->philo_count)
@@ -61,9 +62,6 @@ bool	init_data(t_data *data, char **argv)
 		return (false);
 	data->forks = malloc(data->philo_count * sizeof(mutex_t));
 	if (!data->forks)
-		return (false);
-	data->philo = malloc(data->philo_count * sizeof(t_philo));
-	if (!data->philo)
 		return (false);
 	if (create_philos(data) == false)
 		return (false);
