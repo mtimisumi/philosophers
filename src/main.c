@@ -28,23 +28,20 @@ void	monitor_philos(t_data *data)
 	}
 }
 
-bool	philo(t_data *data)
-{
-	if (start_diner(data) == false)
-		return (false);
-	monitor_philos(data);
-	if (end_diner(data) == false)
-		return (false);
-	return (true);
-}
-
 int	main(int argc, char *argv[])
 {
 	t_data	data;
 
 	if (argc != 5 && argc != 6)
 		return (printf("Invalid amount of args\n"), 1);
-	if (init_data(&data, argv) == false || philo(&data) == false)
+	if (init_data(&data, argv) == false)
 		return (cleanup(&data), 1);
-	return (cleanup(&data), 0);
+	if (start_diner(&data) == false)
+		return (cleanup(&data), 1);
+	monitor_philos(&data);
+	if (end_diner(&data) == false)
+		return (cleanup(&data), 1);
+	cleanup(&data);
+	return (0);
+
 }

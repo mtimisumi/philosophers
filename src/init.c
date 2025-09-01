@@ -39,7 +39,6 @@ bool	init_data(t_data *data, char **argv)
 		return (false);
 
 	memset(data, 0, sizeof(t_data));
-	data->start_time = get_time_in_ms();
 	data->philo_count = to_pos_int(argv[1]);
 	data->time_to_die = to_pos_int(argv[2]);
 	data->time_to_eat = to_pos_int(argv[3]);

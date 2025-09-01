@@ -32,6 +32,7 @@ bool	start_diner(t_data *data)
 	if (init_mutex(data) == false)
 		return (false);
 	i = 0;
+	data->start_time = get_time_in_ms();
 	while (i < data->philo_count)
 	{
 		if (pthread_create(&data->philos[i], NULL, &routine, &data->philo[i]) != 0)
