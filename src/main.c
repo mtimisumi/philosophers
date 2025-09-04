@@ -9,21 +9,21 @@ void	monitor_philos(t_data *data)
 	{
 		if (i == data->philo_count)
 			i = 0;
-		if (is_dead(data, i) == true)
+		if (monitor_dead(data, i) == true)
 		{
-			pthread_mutex_lock(&data->status[DEAD]);
+			pthread_mutex_lock(&data->lock[DEAD]);
 			data->dead = true;
 			printf("%-6ld %-3d has died\n", get_cur_time(data->start_time), i);
-			pthread_mutex_unlock(&data->status[DEAD]);
+			pthread_mutex_unlock(&data->lock[DEAD]);
 			break ;
 		}
-		pthread_mutex_lock(&data->status[FULL]);
+		pthread_mutex_lock(&data->lock[FULL]);
 		if (data->full == data->philo_count)
 		{
 			printf("\nall philosophers are full\n");
 			break ;
 		}
-		pthread_mutex_unlock(&data->status[FULL]);
+		pthread_mutex_unlock(&data->lock[FULL]);
 		i++;
 	}
 }

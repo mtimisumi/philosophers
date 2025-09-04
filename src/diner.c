@@ -3,11 +3,15 @@
 bool	init_mutex(t_data *data)
 {
 	int	i;
-	
-	if (pthread_mutex_init(&data->status[0], NULL) != 0)
+
+	if (pthread_mutex_init(&data->lock[0], NULL) != 0)
 		return (false);
-	if (pthread_mutex_init(&data->status[1], NULL) != 0)
-		return (pthread_mutex_destroy(&data->status[0]), false);
+	if (pthread_mutex_init(&data->lock[1], NULL) != 0)
+		return (destroy_lock_mutex(data, 0), false);
+	if (pthread_mutex_init(&data->lock[2], NULL) != 0)
+		return (destroy_lock_mutex(data, 1), false);
+	if (pthread_mutex_init(&data->lock[3], NULL) != 0)
+		return (destroy_lock_mutex(data, 2), false);
 	i = 0;
 	while (i < data->philo_count)
 	{
@@ -56,15 +60,9 @@ bool	end_diner(t_data *data)
 	while (i < data->philo_count)
 	{
 		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->philo[i].meal);
 		i++;
 	}
-	i = 0;
-	while (i < data->philo_count)
-	{
-		pthread_mutex_destroy(&data->philo->meal);
-		i++;
-	}
-	pthread_mutex_destroy(&data->status[DEAD]);
-	pthread_mutex_destroy(&data->status[FULL]);
+	destroy_lock_mutex(data, 3);
 	return (true);
 }

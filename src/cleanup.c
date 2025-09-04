@@ -33,6 +33,15 @@ void	destroy_meal_mutex(t_data *data, int i)
 	data->philo = NULL;
 }
 
+void	destroy_lock_mutex(t_data *data, int i)
+{
+	while (i >= 0)
+	{
+		pthread_mutex_destroy(&data->lock[i]);
+		i--;
+	}
+}
+
 void	cleanup(t_data *data)
 {
 	if (data->philos)

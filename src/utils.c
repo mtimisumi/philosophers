@@ -1,38 +1,18 @@
 #include "philo.h"
 
-int	to_pos_int(char *s)
-{
-	int	i;
-	int	nbr;
-
-	if (!s)
-		return (-1);
-	i = 0;
-	nbr = 0;
-	while (s[i])
-	{
-		nbr = nbr + (s[i] - '0');
-		if (s[i + 1] != '\0')
-			nbr = nbr * 10;
-		i++;
-	}
-	return (nbr);
-}
-
-
 bool	check_dead_status(t_data *data)
 {
-	pthread_mutex_lock(&data->status[0]);
+	pthread_mutex_lock(&data->lock[DEAD]);
 	if (data->dead == true)
 	{
-		pthread_mutex_unlock(&data->status[0]);
+		pthread_mutex_unlock(&data->lock[DEAD]);
 		return (true);
 	}
-	pthread_mutex_unlock(&data->status[0]);
+	pthread_mutex_unlock(&data->lock[DEAD]);
 	return (false);
 }
 
-bool	is_dead(t_data *data, int i)
+bool	monitor_dead(t_data *data, int i)
 {
 	pthread_mutex_lock(&data->philo[i].meal);
 	if ((get_cur_time(data->start_time) - data->philo[i].last_meal) > data->time_to_die)
@@ -45,9 +25,20 @@ bool	is_dead(t_data *data, int i)
 	
 }
 
-void	print_msg(t_data *data, char *msg, long start_time, int id)
+void	print_action(t_data *data, int id, e_act act)
 {
-	if (check_dead_status(data) == false)
-		printf("%-6ld %-3d %s\n", get_cur_time(start_time), id, msg);
-}
+	char	*msg;
 
+	pthread_mutex_lock(&data->lock[PRINT]);
+	if (act == EAT)
+		msg = "is eating\n";
+	else if (act == SLEEP)
+		msg = "is sleeping\n";
+	else if (act == FORK)
+		msg = "has taken a fork\n";
+	else if (act == THINK)
+		msg = "is thinking\n";
+	if (check_dead_status(data) == false)
+		printf("%-6ld %-3d %s", get_cur_time(data->start_time), id, msg);
+	pthread_mutex_unlock(&data->lock[PRINT]);
+}
