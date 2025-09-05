@@ -20,7 +20,6 @@ bool	create_philos(t_data *data)
 	data->philo = malloc(data->philo_count *sizeof(t_philo));
 	if (!data->philo)
 		return (false);
-	
 	left_fork = &data->forks[data->philo_count - 1];
 	i = 0;
 	while (i < data->philo_count)

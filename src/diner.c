@@ -10,8 +10,6 @@ bool	init_mutex(t_data *data)
 		return (destroy_lock_mutex(data, 0), false);
 	if (pthread_mutex_init(&data->lock[2], NULL) != 0)
 		return (destroy_lock_mutex(data, 1), false);
-	if (pthread_mutex_init(&data->lock[3], NULL) != 0)
-		return (destroy_lock_mutex(data, 2), false);
 	i = 0;
 	while (i < data->philo_count)
 	{
@@ -63,6 +61,6 @@ bool	end_diner(t_data *data)
 		pthread_mutex_destroy(&data->philo[i].meal);
 		i++;
 	}
-	destroy_lock_mutex(data, 3);
+	destroy_lock_mutex(data, 2);
 	return (true);
 }

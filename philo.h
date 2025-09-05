@@ -14,8 +14,7 @@ typedef struct s_data	t_data;
 
 # define DEAD 0
 # define FULL 1
-# define MUST_EAT 2
-#define PRINT 3
+#define PRINT 2
 
 typedef struct	s_philo
 {
@@ -39,7 +38,7 @@ typedef struct	s_data
 	int			time_to_eat;
 	int			time_to_sleep;
 	int			amount_of_meals;
-	mutex_t		lock[4];
+	mutex_t		lock[3];
 	pthread_t	*philos;
 	mutex_t		*forks;
 	t_philo		*philo;
@@ -83,5 +82,12 @@ bool	end_diner(t_data *data);
 
 // routine
 void	*routine(void *arg);
+
+// routine utils
+bool	single_philo(t_philo *philo);
+int		lock_meal(t_philo *philo);
+bool	philo_is_full(t_philo *philo);
+bool	think_more(t_data *data);
+
 
 #endif
